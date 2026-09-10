@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- TITLE: must carry the version number. Pattern: "{Doc Title} v{N.N} — {subtitle}" -->
+<title>Commodities From First Principles v1.0 — a field guide for people starting at zero</title>
+<meta name="description" content="A ground-up field guide to commodity markets: physical balances, curves, basis, hedging, instruments, returns, research, and red flags." />
+<meta name="theme-color" content="#f5f5f7" id="themeColorMeta" />
+<meta name="color-scheme" content="light dark" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Commodities From First Principles v1.0" />
+<meta property="og:description" content="A ground-up field guide to commodity markets: physical balances, curves, basis, hedging, instruments, returns, research, and red flags." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%230071e3'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   TOKENS — the ONLY place literal colors are allowed in this file.
+   Every rule below this block references var(--…). No exceptions.
+   Light and dark are declared as matched pairs so nothing can go
+   white-on-white or black-on-black when the theme flips.
+   ========================================================================= */
+:root{
+  color-scheme:light;
+  /* page + surfaces */
+  --bg:#f5f5f7;
+  --bg-grad-1:rgba(234,243,255,.85);
+  --bg-grad-2:rgba(255,240,223,.75);
+  --bg-grad-3:#fbfbfd;
+  --bg-grad-4:#eff2f6;
+  --surface:#ffffff;
+  --surface-2:#f0f0f3;
+  --surface-3:#f1f3f5;
+  --glass:rgba(255,255,255,.72);
+  --glass-2:rgba(255,255,255,.60);
+  --glass-border:rgba(255,255,255,.72);
+  --nav-bg:rgba(245,245,247,.90);
+  /* text */
+  --ink:#111114;
+  --ink-2:#3a3f4c;
+  --ink-3:#4a505c;
+  --ink-dim:#6b6f7b;
+  --ink-strong:#000000;
+  /* lines */
+  --line:rgba(0,0,0,.09);
+  --line-2:rgba(0,0,0,.16);
+  --line-solid:#e3e3e8;
+  --line-strong:#d2d2d7;
+  /* accents */
+  --blue:#0071e3;      --blue-ink:#0057b8;    --blue-soft:#e9f3ff;
+  --green:#1f8f4e;     --green-ink:#0f6a36;   --green-soft:#e9f7ee;
+  --orange:#b65f00;    --orange-ink:#8a4800;  --orange-soft:#fff1df;
+  --purple:#6b47d6;    --purple-ink:#4d32a3;  --purple-soft:#f0edff;
+  --red:#bd2b28;       --red-ink:#a52320;     --red-soft:#fdeceb;
+  --on-accent:#ffffff;
+  /* inverted panel — the deliberately high-contrast block.
+     Dark in light mode; a LIFTED panel in dark mode so it never vanishes. */
+  --invert-bg:#141417;
+  --invert-ink:#f5f5f7;
+  --invert-ink-2:#c9ccd3;
+  --invert-line:#2a2a30;
+  /* code */
+  --code-bg:#141417;   --code-ink:#e6e8ee;    --code-line:#2a2a30;
+  --code-c:#7f8798; --code-k:#6fb2ff; --code-g:#63d193; --code-r:#ff7b72; --code-y:#ffc46b;
+  --code-light-bg:#f1f2f4; --code-light-ink:#1c1f26;
+  /* callouts */
+  --note-bg:rgba(0,113,227,.05);   --note-line:rgba(0,113,227,.20);
+  --warn-bg:#fff7e8;               --warn-line:#f2d6a7;  --warn-ink:#5c3b00;
+  /* chrome */
+  --strip-bg:#111114;  --strip-ink:#ffffff;
+  --strip-btn:rgba(255,255,255,.10); --strip-btn-hover:rgba(255,255,255,.20);
+  --strip-line:rgba(255,255,255,.20);
+  --pill-bg:rgba(255,255,255,.68);  --pill-ink:#252934;
+  --pill-on-bg:#111114;             --pill-on-ink:#ffffff;
+  --shadow:0 18px 60px rgba(0,0,0,.10);
+  --shadow-2:0 8px 28px rgba(0,0,0,.08);
+  --shadow-hover:0 16px 50px rgba(0,0,0,.11);
+  --orb-opacity:.72;
+  --gradtext:linear-gradient(102deg,#17191d 0%,#465365 48%,#0874dc 86%,#0068c9 100%);
+  --gradtext-fallback:#34475f;
+  /* type + geometry */
+  --serif:'Source Serif 4', ui-serif, Georgia, serif;
+  --sans:'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', Segoe UI, sans-serif;
+  --mono:'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  --radius:28px; --radius-2:18px;
+}
+
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d0d10;
+  --bg-grad-1:rgba(23,42,71,.55);
+  --bg-grad-2:rgba(58,40,20,.45);
+  --bg-grad-3:#101015;
+  --bg-grad-4:#0a0a0d;
+  --surface:#17171c;
+  --surface-2:#1d1d23;
+  --surface-3:#22222a;
+  --glass:rgba(30,30,37,.72);
+  --glass-2:rgba(30,30,37,.60);
+  --glass-border:rgba(255,255,255,.10);
+  --nav-bg:rgba(16,16,20,.90);
+  --ink:#f2f2f5;
+  --ink-2:#c3c7d1;
+  --ink-3:#adb2bd;
+  --ink-dim:#9096a3;
+  --ink-strong:#ffffff;
+  --line:rgba(255,255,255,.12);
+  --line-2:rgba(255,255,255,.20);
+  --line-solid:#2b2b33;
+  --line-strong:#3a3a44;
+  --blue:#4da3ff;      --blue-ink:#8cc3ff;    --blue-soft:rgba(77,163,255,.16);
+  --green:#4bc47d;     --green-ink:#7fd9a2;   --green-soft:rgba(75,196,125,.16);
+  --orange:#f0a23c;    --orange-ink:#f5bd72;  --orange-soft:rgba(240,162,60,.16);
+  --purple:#a78bfa;    --purple-ink:#c4b1ff;  --purple-soft:rgba(167,139,250,.18);
+  --red:#f0736e;       --red-ink:#f79b97;     --red-soft:rgba(240,115,110,.16);
+  --on-accent:#0d0d10;
+  --invert-bg:#22222b;
+  --invert-ink:#f5f5f7;
+  --invert-ink-2:#c9ccd3;
+  --invert-line:#3d3d49;
+  --code-bg:#101014;   --code-ink:#e6e8ee;    --code-line:#2f2f3a;
+  --code-light-bg:#1b1b21; --code-light-ink:#dfe2e9;
+  --note-bg:rgba(77,163,255,.10);  --note-line:rgba(77,163,255,.30);
+  --warn-bg:rgba(240,162,60,.12);  --warn-line:rgba(240,162,60,.34); --warn-ink:#f3cd95;
+  --strip-bg:#000000;  --strip-ink:#f2f2f5;
+  --strip-btn:rgba(255,255,255,.10); --strip-btn-hover:rgba(255,255,255,.22);
+  --strip-line:rgba(255,255,255,.22);
+  --pill-bg:rgba(255,255,255,.07);  --pill-ink:#dcdfe7;
+  --pill-on-bg:#f2f2f5;             --pill-on-ink:#0d0d10;
+  --shadow:0 18px 60px rgba(0,0,0,.55);
+  --shadow-2:0 8px 28px rgba(0,0,0,.45);
+  --shadow-hover:0 16px 50px rgba(0,0,0,.60);
+  --orb-opacity:.30;
+  --gradtext:linear-gradient(102deg,#ffffff 0%,#cdd8e8 48%,#6fb2ff 86%,#4da3ff 100%);
+  --gradtext-fallback:#cfe0f5;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ============================ base ============================ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%, var(--bg-grad-1) 0, transparent 38%),
+    radial-gradient(circle at 80% 8%, var(--bg-grad-2) 0, transparent 32%),
+    linear-gradient(180deg, var(--bg-grad-3) 0, var(--bg) 45%, var(--bg-grad-4) 100%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.45;
+  transition:background-color .2s ease, color .2s ease;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1460px;margin:0 auto;padding:0 26px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.vlabel{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--mono)}
+
+/* ============================ topbar ============================ */
+.topbar{position:sticky;top:0;z-index:60}
+.contact-strip{background:var(--strip-bg);color:var(--strip-ink);border-bottom:1px solid var(--strip-line)}
+.contact-strip-inner{max-width:1460px;margin:0 auto;padding:8px 26px;display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.contact-link{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;border:1px solid var(--strip-line);background:var(--strip-btn);color:var(--strip-ink);font-size:12px;font-weight:700;letter-spacing:-.01em;transition:background .16s,transform .16s}
+.contact-link:hover{background:var(--strip-btn-hover);transform:translateY(-1px)}
+.contact-link svg{width:14px;height:14px;fill:currentColor;flex:0 0 auto}
+.themetoggle{display:inline-flex;align-items:center;gap:7px;margin-left:6px;padding:7px 11px;border-radius:999px;border:1px solid var(--strip-line);background:var(--strip-btn);color:var(--strip-ink);font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:background .16s,transform .16s}
+.themetoggle:hover{background:var(--strip-btn-hover);transform:translateY(-1px)}
+.themetoggle svg{width:14px;height:14px;fill:currentColor;flex:0 0 auto}
+html[data-theme="light"] .themetoggle .i-moon{display:block}
+html[data-theme="light"] .themetoggle .i-sun{display:none}
+html[data-theme="dark"]  .themetoggle .i-moon{display:none}
+html[data-theme="dark"]  .themetoggle .i-sun{display:block}
+
+.nav{background:var(--nav-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1460px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:13px 26px}
+.brand{font-weight:800;letter-spacing:-.03em;white-space:nowrap;color:var(--ink)}
+.brand span{font-family:var(--serif);font-weight:900}
+.brand .vtag{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink-dim);letter-spacing:.02em;margin-left:6px}
+.navlinks{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto;min-width:0;padding-bottom:2px;scrollbar-width:thin}
+.navlinks a{flex:0 0 auto;white-space:nowrap;border:1px solid var(--line);background:var(--pill-bg);color:var(--pill-ink);padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+.navlinks a.active{background:var(--pill-on-bg);color:var(--pill-on-ink);border-color:var(--pill-on-bg)}
+.menubtn{display:none;margin-left:auto;border:1px solid var(--line);background:var(--pill-bg);border-radius:12px;width:40px;height:36px;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.menubtn i{display:block;width:16px;height:1.6px;background:var(--ink);border-radius:2px}
+.drawer{display:none;border-top:1px solid var(--line);background:var(--nav-bg);backdrop-filter:blur(18px);padding:12px 16px 16px}
+.drawer.open{display:block}
+.drawer a{display:block;padding:11px 4px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;color:var(--ink)}
+
+/* ============================ hero ============================ */
+.hero{min-height:78vh;display:flex;align-items:center;position:relative;isolation:isolate;overflow:hidden;padding:46px 0 26px}
+.orb{position:absolute;border-radius:50%;pointer-events:none;z-index:-1;opacity:var(--orb-opacity);filter:blur(22px)}
+.orb.a{width:540px;height:540px;background:radial-gradient(circle at 36% 34%,var(--blue) 0 14%,transparent 72%);right:-155px;top:-118px}
+.orb.b{width:370px;height:370px;background:radial-gradient(circle at 58% 44%,var(--orange) 0 14%,transparent 72%);left:-142px;bottom:54px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:16px}
+.eyebrow b{color:var(--ink-2)}
+.h1{font-family:var(--serif);font-size:clamp(48px,7vw,104px);line-height:.92;letter-spacing:-.06em;margin:0 0 24px;color:var(--ink)}
+.h1 em{font-style:normal;background:var(--gradtext);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gradtext-fallback)}
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){.h1 em{background:none;-webkit-text-fill-color:currentColor;color:var(--gradtext-fallback)}}
+.lede{font-size:clamp(18px,2.1vw,25px);line-height:1.34;color:var(--ink-2);max-width:840px;margin:0 0 26px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.cta{background:var(--pill-on-bg);color:var(--pill-on-ink);border:1px solid var(--pill-on-bg);border-radius:999px;padding:13px 17px;font-weight:700;display:inline-flex;gap:9px;align-items:center;font-size:14.5px;cursor:pointer;font-family:var(--sans)}
+.cta.secondary{background:var(--glass);color:var(--ink);border:1px solid var(--line-2)}
+
+/* ============================ sections ============================ */
+.section{padding:70px 0;scroll-margin-top:124px}
+.section h2{font-family:var(--serif);font-size:clamp(36px,4.4vw,64px);line-height:.96;letter-spacing:-.05em;margin:0 0 14px;color:var(--ink)}
+.section h3.sub-h{font-family:var(--serif);font-size:28px;letter-spacing:-.04em;margin:40px 0 8px;font-weight:700;color:var(--ink)}
+.section .sub{font-size:18.5px;color:var(--ink-3);max-width:940px;margin:0 0 28px;line-height:1.5}
+.section p{color:var(--ink-3)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.rule{height:1px;background:var(--line);margin:0;border:0}
+
+/* ============================ components ============================ */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+.card{background:var(--glass);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow-2);transition:transform .18s ease,box-shadow .18s ease;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.card h3{margin:0 0 9px;font-size:19px;letter-spacing:-.035em;line-height:1.15;color:var(--ink)}
+.card p{margin:0;color:var(--ink-3);font-size:14px}
+.card ul{margin:10px 0 0;padding-left:17px;color:var(--ink-3);font-size:13.5px}
+.card li{margin:0 0 6px}
+
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-2);padding:22px}
+.panel h3{margin:0 0 6px;font-size:21px;letter-spacing:-.035em;color:var(--ink)}
+.panel p,.panel li{color:var(--ink-3);font-size:14.5px}
+.panel ul,.panel ol{margin:12px 0 0;padding-left:18px}
+
+/* inverted panel: high-contrast in BOTH themes */
+.panel.invert,.plainbox{background:var(--invert-bg);border:1px solid var(--invert-line);color:var(--invert-ink);border-radius:24px;padding:26px 28px;box-shadow:var(--shadow)}
+.panel.invert h3,.plainbox h3{color:var(--invert-ink);font-family:var(--serif);font-size:24px;letter-spacing:-.035em;margin:0 0 10px}
+.panel.invert p,.panel.invert li,.plainbox p{color:var(--invert-ink-2);font-size:15.5px;line-height:1.6}
+
+.stat{padding:18px;background:var(--glass);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-2)}
+.stat .n{font-family:var(--serif);font-size:40px;font-weight:900;letter-spacing:-.05em;line-height:.9;color:var(--ink)}
+.stat .t{font-size:12.5px;color:var(--ink-dim);margin-top:8px;line-height:1.4}
+
+.meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.tag{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--surface-3);border:1px solid var(--line);border-radius:999px;padding:5px 8px;display:inline-block}
+.tag.blue{background:var(--blue-soft);color:var(--blue-ink);border-color:var(--blue-soft)}
+.tag.green{background:var(--green-soft);color:var(--green-ink);border-color:var(--green-soft)}
+.tag.orange{background:var(--orange-soft);color:var(--orange-ink);border-color:var(--orange-soft)}
+.tag.purple{background:var(--purple-soft);color:var(--purple-ink);border-color:var(--purple-soft)}
+.tag.red{background:var(--red-soft);color:var(--red-ink);border-color:var(--red-soft)}
+
+.fieldnote{font-size:13.5px;line-height:1.6;color:var(--ink-3);background:var(--note-bg);border:1px solid var(--note-line);border-left:3px solid var(--blue);border-radius:14px;padding:14px 18px;margin:24px 0;max-width:90ch}
+.fieldnote b{color:var(--blue)}
+.warning{background:var(--warn-bg);border:1px solid var(--warn-line);border-left:3px solid var(--orange);border-radius:14px;padding:14px 18px;color:var(--warn-ink);margin:22px 0;font-size:13.5px;max-width:90ch}
+.warning b{color:var(--orange-ink)}
+
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:100px;border:1px solid var(--line-strong);background:var(--pill-bg);color:var(--ink-3);cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--ink-dim);color:var(--ink)}
+.chip.active{background:var(--blue);border-color:var(--blue);color:var(--on-accent)}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+
+.tablewrap{background:var(--glass);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-2);overflow:hidden}
+.table-scroll{overflow:auto}
+table{border-collapse:collapse;width:100%}
+th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:left;font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);padding:14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{vertical-align:top;padding:14px;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--ink-3)}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:700;color:var(--ink)}
+
+pre.term{font-family:var(--mono);font-size:12px;line-height:1.62;background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-line);border-radius:16px;padding:16px 18px;overflow:auto;margin:14px 0 0;white-space:pre}
+pre.term .c{color:var(--code-c)} pre.term .k{color:var(--code-k)}
+pre.term .g{color:var(--code-g)} pre.term .r{color:var(--code-r)} pre.term .y{color:var(--code-y)}
+pre.light{font-family:var(--mono);font-size:12px;line-height:1.6;background:var(--code-light-bg);color:var(--code-light-ink);border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow:auto;margin:12px 0 0;white-space:pre}
+
+/* accordion */
+.fam{background:var(--surface);border:1px solid var(--line-solid);border-radius:18px;overflow:hidden;margin-bottom:10px;transition:border-color .18s}
+.fam.open{border-color:var(--line-strong);box-shadow:var(--shadow-2)}
+.fam-head{display:grid;grid-template-columns:46px 1fr auto;gap:16px;align-items:center;padding:20px 22px;cursor:pointer;width:100%;text-align:left;background:none;border:none;color:var(--ink);font:inherit}
+.fam-dot{width:40px;height:40px;border-radius:9px;display:grid;place-items:center;font-family:var(--serif);font-size:19px;color:var(--on-accent);background:var(--blue);font-weight:700}
+.fam-title{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.fam-sub{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:3px}
+.fam-toggle{font-family:var(--mono);font-size:20px;color:var(--ink-dim);transition:transform .2s}
+.fam.open .fam-toggle{transform:rotate(45deg)}
+.fam-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid transparent}
+.fam.open .fam-body{grid-template-rows:1fr;border-top-color:var(--line-solid)}
+.fam-body>div{overflow:hidden}
+.fam-inner{padding:18px 22px 22px;color:var(--ink-3);font-size:14.5px;line-height:1.6}
+
+/* ============================ footer ============================ */
+.footer{padding:34px 0 60px;color:var(--ink-dim);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
+.footer a{color:var(--blue)}
+.verstamp{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);line-height:1.6}
+
+@media(max-width:960px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .navlinks{display:none}
+  .menubtn{display:flex}
+  .contact-strip-inner{padding:7px 14px;justify-content:center;gap:6px}
+  .contact-link,.themetoggle{flex:1;justify-content:center;max-width:130px;padding:7px 8px;font-size:11px}
+  .hero{min-height:auto;padding:36px 0}
+  .section{padding:48px 0}
+}
+
+/* ============================ additions for this document ============================ */
+
+/* form controls — all colors tokenised so they flip with the theme */
+.controls{display:grid;gap:18px}
+.ctrl{display:grid;gap:7px}
+.ctrl .lab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctrl .lab span{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-dim)}
+.ctrl .lab b{font-family:var(--mono);font-size:13.5px;color:var(--ink);font-weight:700}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:99px;background:var(--line-strong);outline:none;margin:6px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:19px;height:19px;border-radius:50%;background:var(--blue);border:3px solid var(--surface);cursor:pointer;box-shadow:var(--shadow-2)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--blue);border:3px solid var(--surface);cursor:pointer}
+input[type=search],input[type=text]{font-family:var(--sans);font-size:14.5px;padding:12px 14px;border-radius:14px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);width:100%;-webkit-appearance:none;appearance:none}
+input[type=search]::placeholder,input[type=text]::placeholder{color:var(--ink-dim)}
+
+/* calculator shell */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.out{display:grid;gap:0}
+.outrow{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.outrow:last-child{border-bottom:none}
+.outrow .k{font-size:13.5px;color:var(--ink-3);line-height:1.3}
+.outrow .v{font-family:var(--mono);font-size:14.5px;font-weight:700;color:var(--ink);white-space:nowrap}
+.outrow.hi{border-top:1px solid var(--line-2);margin-top:6px;padding-top:14px}
+.outrow.hi .k{color:var(--ink);font-weight:700;font-size:14.5px}
+.outrow.hi .v{font-size:19px;color:var(--blue)}
+.outrow .v.pos{color:var(--green)}
+.outrow .v.neg{color:var(--red)}
+.bar{height:7px;border-radius:99px;background:var(--surface-3);overflow:hidden;margin-top:9px;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--blue);transition:width .18s ease}
+.bar i.warn{background:var(--orange)}
+.bar i.bad{background:var(--red)}
+
+/* glossary */
+.gwrap{display:grid;gap:10px}
+.gitem{background:var(--surface);border:1px solid var(--line-solid);border-radius:16px;padding:15px 18px}
+.gitem h4{margin:0 0 5px;font-size:15.5px;letter-spacing:-.02em;color:var(--ink);display:flex;flex-wrap:wrap;gap:9px;align-items:baseline}
+.gitem h4 em{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:99px;padding:3px 7px}
+.gitem p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-3)}
+.gitem.hide{display:none}
+.gcount{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);margin:14px 0 16px}
+
+/* numbered process cards */
+.card .num{font-family:var(--serif);font-size:13px;font-weight:900;color:var(--on-accent);background:var(--blue);width:26px;height:26px;border-radius:8px;display:grid;place-items:center;margin-bottom:11px}
+.card .num.g{background:var(--green)} .card .num.o{background:var(--orange)}
+.card .num.p{background:var(--purple)} .card .num.r{background:var(--red)}
+
+/* chart shell */
+.chartbox{background:var(--surface);border:1px solid var(--line-solid);border-radius:24px;padding:20px 22px 14px;box-shadow:var(--shadow-2);overflow:hidden}
+.chartbox svg{width:100%;height:auto;display:block}
+.lc-label{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase}
+.lc-stage{cursor:pointer}
+.lc-stage rect{opacity:0}
+.lc-stage:hover rect,.lc-stage.on rect{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend i.b{background:var(--blue)} .legend i.o{background:var(--orange)} .legend i.g{background:var(--green)}
+
+/* two-column prose split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.tight{max-width:78ch}
+.eq{font-family:var(--mono);font-size:13.5px;background:var(--code-light-bg);color:var(--code-light-ink);border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin:16px 0;overflow-x:auto;white-space:nowrap}
+.srcnote{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);margin-top:10px;letter-spacing:.02em}
+.toclist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 0}
+.toclist a{display:block;padding:11px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass-2);font-size:13.5px;color:var(--ink-2);font-weight:600}
+.toclist a:hover{border-color:var(--line-2);color:var(--ink)}
+.toclist a b{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);margin-right:8px;font-weight:700}
+
+@media(max-width:960px){
+  .calc,.split{grid-template-columns:1fr}
+  .toclist{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOPBAR ===================== -->
+<div class="topbar">
+  <div class="contact-strip">
+    <div class="contact-strip-inner">
+      <a class="contact-link" href="mailto:ponelson@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z" fill="currentColor"/></svg>
+        <span>Email</span>
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/ponelson/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 8.5H3.56V19h3.38V8.5ZM5.25 3A1.96 1.96 0 1 0 5.25 6.92 1.96 1.96 0 0 0 5.25 3ZM20.44 13.08c0-3.16-1.68-4.63-3.93-4.63-1.81 0-2.62.99-3.08 1.69V8.5h-3.38V19h3.38v-5.2c0-1.37.26-2.7 1.96-2.7 1.68 0 1.7 1.57 1.7 2.79V19h3.38l-.03-5.92Z" fill="currentColor"/></svg>
+        <span>LinkedIn</span>
+      </a>
+      <a class="contact-link" href="https://ponelson.github.io/pon/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.9 5.34.9 11.6c0 4.9 3.17 9.06 7.57 10.53.55.1.75-.24.75-.53v-1.86c-3.08.67-3.73-1.49-3.73-1.49-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.67.08-.67 1.11.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.46-.28-5.05-1.23-5.05-5.49 0-1.21.43-2.2 1.14-2.98-.11-.28-.5-1.41.11-2.94 0 0 .93-.3 3.05 1.14.88-.25 1.83-.37 2.77-.37.94 0 1.89.13 2.78.37 2.11-1.44 3.04-1.14 3.04-1.14.61 1.53.22 2.66.11 2.94.71.78 1.14 1.77 1.14 2.98 0 4.27-2.6 5.21-5.07 5.48.4.35.76 1.03.76 2.08v3.08c0 .3.2.64.76.53 4.39-1.47 7.56-5.63 7.56-10.53C23.1 5.34 18.27.5 12 .5Z" fill="currentColor"/></svg>
+        <span>GitHub</span>
+      </a>
+      <button class="themetoggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Toggle light or dark theme">
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" fill="currentColor"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-13.5a1 1 0 0 1 1 1V6a1 1 0 1 1-2 0V4.5a1 1 0 0 1 1-1Zm0 15a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1ZM3.5 12a1 1 0 0 1 1-1H6a1 1 0 1 1 0 2H4.5a1 1 0 0 1-1-1Zm14.5 0a1 1 0 0 1 1-1h1.5a1 1 0 1 1 0 2H19a1 1 0 0 1-1-1ZM5.6 5.6a1 1 0 0 1 1.4 0l1.1 1.1a1 1 0 0 1-1.4 1.4L5.6 7a1 1 0 0 1 0-1.4Zm10.3 10.3a1 1 0 0 1 1.4 0l1.1 1.1a1 1 0 0 1-1.4 1.4l-1.1-1.1a1 1 0 0 1 0-1.4Zm2.5-10.3a1 1 0 0 1 0 1.4L17.3 8.1a1 1 0 1 1-1.4-1.4L17 5.6a1 1 0 0 1 1.4 0ZM8.1 15.9a1 1 0 0 1 0 1.4L7 18.4A1 1 0 0 1 5.6 17l1.1-1.1a1 1 0 0 1 1.4 0Z" fill="currentColor"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">Commodities From First Principles<span class="vtag">v1.0</span></div>
+      <div class="navlinks" id="navlinks"></div>
+      <button class="menubtn" id="menubtn" type="button" aria-label="Menu"><i></i><i></i><i></i></button>
+    </div>
+    <div class="drawer" id="drawer"></div>
+  </nav>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="orb a"></div><div class="orb b"></div>
+  <div class="wrap">
+    <div class="eyebrow">Field guide &nbsp;/&nbsp; <b>v1.0</b> &nbsp;&middot;&nbsp; 10 September 2026, 6:46 AM ET &nbsp;&middot;&nbsp; <span class="mono">build 2026-09-10T06:46-04:00</span></div>
+    <h1 class="h1">A commodity price is a <em>map of physical constraints</em></h1>
+    <p class="lede">Commodity markets look like screens full of prices, but the screen is the final layer. Underneath sit mines, wells, farms, processors, warehouses, ships, pipelines, power grids, financing, and contracts. This guide starts at zero and builds the system upward—from physical balance and inventory to basis, curves, hedging, investable instruments, and the claims most likely to mislead.</p>
+    <div class="hero-actions">
+      <a class="cta" href="#orientation">Start at the beginning</a>
+      <a class="cta secondary" href="#glossary">Jump to the glossary</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="section" id="orientation" data-nav="Orientation"><div class="wrap">
+  <div class="kicker">01 / Orientation</div><h2>A commodity is a specification, not a story</h2>
+  <p class="sub">The market does not buy “wheat,” “copper,” or “oil” in the abstract. It buys a defined grade, at a defined place, in a defined month, with rules for delivery and settlement.</p>
+  <div class="grid g4">
+    <div class="card"><div class="meta"><span class="tag blue">Thing</span></div><h3>Physical good</h3><p>A fungible input: barrels, tonnes, bushels, pounds, megawatt-hours. Chemistry and quality still matter.</p></div>
+    <div class="card"><div class="meta"><span class="tag green">Place</span></div><h3>Delivery point</h3><p>A price belongs somewhere. Moving material between origins and consumers creates basis, freight, and congestion.</p></div>
+    <div class="card"><div class="meta"><span class="tag orange">Time</span></div><h3>Delivery month</h3><p>Storage links today to tomorrow. The curve records the price of time, scarcity, financing, and inventory.</p></div>
+    <div class="card"><div class="meta"><span class="tag purple">Rules</span></div><h3>Contract</h3><p>Lot size, grade, location, expiry, settlement, and force-majeure terms turn a product into a tradable instrument.</p></div>
+  </div>
+  <div class="panel invert" style="margin-top:22px"><h3>The sentence to keep</h3><p>A commodity price is the clearing price for one specification, at one location, for one moment in time. Change any of those nouns and you may be looking at a different market.</p></div>
+</div></section>
+
+<section class="section" id="families" data-nav="Families"><div class="wrap">
+  <div class="kicker">02 / The map</div><h2>Four families, four physical logics</h2>
+  <p class="sub">The common language is price, but the underlying constraints are different enough that each family deserves its own mental model.</p>
+  <div class="grid g2">
+    <div class="card"><div class="meta"><span class="tag blue">Energy</span></div><h3>Flows through networks</h3><p>Oil can be stored and shipped; gas depends more heavily on pipelines and liquefaction; electricity must be balanced almost instantly. Transport capacity often defines the market.</p></div>
+    <div class="card"><div class="meta"><span class="tag purple">Metals</span></div><h3>Stocks above ground matter</h3><p>Base metals are industrial inputs, precious metals also behave as monetary assets, and bulk minerals are dominated by logistics. Grade, recovery, and treatment charges connect mine economics to refined price.</p></div>
+    <div class="card"><div class="meta"><span class="tag green">Agriculture</span></div><h3>Biology meets weather</h3><p>Planting cycles, yields, harvest windows, spoilage, and substitution create sharp seasonal balances. A forecast error cannot be fixed until the next crop.</p></div>
+    <div class="card"><div class="meta"><span class="tag orange">Livestock & softs</span></div><h3>Inventories can grow—or rot</h3><p>Cattle and hogs have biological lags. Coffee, cocoa, sugar, and cotton combine concentrated geography with weather, labor, and disease risk.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="balance" data-nav="Balance"><div class="wrap">
+  <div class="kicker">03 / Physical balance</div><h2>Price begins with a mass balance</h2>
+  <p class="sub">Start with what is available, add what arrives, subtract what is consumed, and reconcile the difference in inventory. Almost every commodity argument is a disagreement about one of those terms.</p>
+  <pre class="light">Ending stocks = Beginning stocks + Production + Imports − Consumption − Exports − Losses</pre>
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card"><h3>Supply responds slowly</h3><p>Mines take years, wells decline, crops wait for seasons, and processing capacity is specialized. High prices do not summon immediate supply.</p></div>
+    <div class="card"><h3>Demand can be stubborn</h3><p>Factories cannot redesign products overnight, utilities must keep systems running, and food demand is essential. Short-run elasticity is often low.</p></div>
+    <div class="card"><h3>Inventory is the shock absorber</h3><p>Stocks bridge timing gaps. When usable inventory is thin, a small disruption can require a large price move to destroy demand or attract supply.</p></div>
+  </div>
+  <div class="fieldnote"><b>Read balances skeptically.</b> “Inventory” may exclude material in transit, strategic reserves, unreported private stocks, or metal unavailable at today’s price. The headline number is not always the accessible number.</div>
+</div></section>
+
+<section class="section" id="curve" data-nav="Curve"><div class="wrap">
+  <div class="kicker">04 / Time</div><h2>The futures curve is a market for storage</h2>
+  <p class="sub">A strip of monthly prices shows how the market values delivery through time. It is not a simple forecast.</p>
+  <div class="grid g2">
+    <div class="panel"><h3>Contango</h3><p>Later delivery trades above prompt delivery. Carry may reflect financing, storage, insurance, and ample current supply. If the spread covers all costs, inventory can be bought, stored, and hedged.</p></div>
+    <div class="panel invert"><h3>Backwardation</h3><p>Prompt delivery trades above later delivery. Immediate possession has value: inventories may be scarce, buyers urgent, or constraints binding. The implied convenience yield is high.</p></div>
+  </div>
+  <h3 class="sub-h">Carry calculator</h3>
+  <div class="panel">
+    <div class="grid g4">
+      <label class="card"><h3>Spot price</h3><input id="ccSpot" type="number" value="100" step="1"></label>
+      <label class="card"><h3>Annual financing %</h3><input id="ccRate" type="number" value="5" step="0.1"></label>
+      <label class="card"><h3>Storage / month</h3><input id="ccStore" type="number" value="0.45" step="0.05"></label>
+      <label class="card"><h3>Months</h3><input id="ccMonths" type="number" value="6" min="1" max="36"></label>
+    </div>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="stat"><div class="n" id="ccFair">—</div><div class="t">cash-and-carry breakeven future</div></div>
+      <div class="stat"><div class="n" id="ccCarry">—</div><div class="t">total financing plus storage</div></div>
+      <div class="stat"><div class="n" id="ccPct">—</div><div class="t">carry as % of spot</div></div>
+    </div>
+  </div>
+  <div class="warning"><b>Teaching model.</b> This simple carry calculation omits convenience yield, quality differences, taxes, collateral, daily margining, handling loss, and delivery-option value.</div>
+</div></section>
+
+<section class="section" id="basis" data-nav="Basis"><div class="wrap">
+  <div class="kicker">05 / Space & quality</div><h2>Basis is where the physical market speaks</h2>
+  <p class="sub">Basis is the difference between a local cash price and a chosen benchmark. It absorbs freight, quality, timing, taxes, congestion, and local bargaining power.</p>
+  <div class="tablewrap"><div class="table-scroll"><table><thead><tr><th>Driver</th><th>What changes</th><th>Typical signal</th><th>Question to ask</th></tr></thead><tbody>
+    <tr><td>Location</td><td>Freight and access</td><td>Discount at a stranded origin</td><td>Can the marginal unit reach the benchmark?</td></tr>
+    <tr><td>Quality</td><td>Yield or processing cost</td><td>Premium for desirable grade</td><td>What can the buyer actually make from it?</td></tr>
+    <tr><td>Timing</td><td>Prompt availability</td><td>Nearby premium in a squeeze</td><td>Is the material deliverable before it is needed?</td></tr>
+    <tr><td>Optionality</td><td>Destination or specification choice</td><td>Value above simple transport parity</td><td>Who controls the rerouting decision?</td></tr>
+  </tbody></table></div></div>
+</div></section>
+
+<section class="section" id="participants" data-nav="Players"><div class="wrap">
+  <div class="kicker">06 / Participants</div><h2>Commercial users transfer risk; investors warehouse it</h2>
+  <p class="sub">The same futures contract can be prudent insurance for one participant and a directional bet for another.</p>
+  <div class="grid g3">
+    <div class="card"><div class="meta"><span class="tag green">Hedger</span></div><h3>Producer</h3><p>Sells futures or swaps to lock a selling price. The hedge reduces price risk but creates basis risk and can require cash collateral.</p></div>
+    <div class="card"><div class="meta"><span class="tag orange">Hedger</span></div><h3>Consumer</h3><p>Buys futures or swaps to lock an input cost. Airlines, food manufacturers, utilities, and fabricators care about margin, not just price direction.</p></div>
+    <div class="card"><div class="meta"><span class="tag purple">Risk capital</span></div><h3>Trader or investor</h3><p>Takes price, curve, volatility, or relative-value exposure. Their liquidity helps hedgers transact, but leverage can amplify forced flows.</p></div>
+  </div>
+  <div class="fieldnote"><b>Hedge effectiveness.</b> A perfect hedge matches commodity, grade, location, volume, and timing. Real hedges rarely match all five, so the residual is basis risk.</div>
+</div></section>
+
+<section class="section" id="instruments" data-nav="Instruments"><div class="wrap">
+  <div class="kicker">07 / Market instruments</div><h2>Choose the exposure before choosing the ticker</h2>
+  <p class="sub">Spot cargoes, futures, options, swaps, producer equities, royalties, and funds can all be called “commodity exposure.” Their payoff mechanics are not interchangeable.</p>
+  <div class="tablewrap"><div class="table-scroll"><table><thead><tr><th>Instrument</th><th>Primary exposure</th><th>Hidden variable</th><th>Common mistake</th></tr></thead><tbody>
+    <tr><td>Physical</td><td>Local outright price</td><td>Storage, transport, quality</td><td>Ignoring operational obligations</td></tr>
+    <tr><td>Futures</td><td>Benchmark price and curve</td><td>Roll, margin, delivery rules</td><td>Treating the curve as a forecast</td></tr>
+    <tr><td>Options</td><td>Price plus volatility</td><td>Time decay and skew</td><td>Being right on direction but wrong on timing</td></tr>
+    <tr><td>Producer equity</td><td>Commodity-linked business</td><td>Costs, balance sheet, management, jurisdiction</td><td>Calling operational leverage a pure proxy</td></tr>
+    <tr><td>Index fund</td><td>Rules-based futures basket</td><td>Contract selection and roll method</td><td>Expecting spot returns</td></tr>
+  </tbody></table></div></div>
+</div></section>
+
+<section class="section" id="returns" data-nav="Returns"><div class="wrap">
+  <div class="kicker">08 / Return anatomy</div><h2>A futures return has more than one engine</h2>
+  <p class="sub">For a collateralized futures position, total return is approximately the move in the contract, plus the gain or loss from replacing it as expiry approaches, plus interest earned on collateral.</p>
+  <pre class="light">Total return ≈ Spot/contract return + Roll yield + Collateral yield − fees</pre>
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card"><h3>Price return</h3><p>The change in the held futures contract. It can resemble spot over short horizons but is not identical.</p></div>
+    <div class="card"><h3>Roll yield</h3><p>The effect of selling the expiring contract and buying a later one. Persistent contango is a headwind; backwardation can be a tailwind.</p></div>
+    <div class="card"><h3>Collateral yield</h3><p>Futures require margin rather than full notional funding, so uncommitted cash can earn a short-term rate.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="analysis" data-nav="Analysis"><div class="wrap">
+  <div class="kicker">09 / Research workflow</div><h2>Build the view from the physical system outward</h2>
+  <p class="sub">A durable thesis connects a balance, a bottleneck, a price mechanism, and a falsifiable timeline.</p>
+  <div class="fam open"><button class="fam-head" type="button"><div class="fam-dot">1</div><div><div class="fam-title">Define the contract</div><div class="fam-sub">Unit · grade · place · month · settlement</div></div><div class="fam-toggle">+</div></button><div class="fam-body"><div><div class="fam-inner">Write down exactly what the quoted price represents. Identify the deliverable grades, location, lot size, last trading day, and whether settlement is physical or financial.</div></div></div></div>
+  <div class="fam"><button class="fam-head" type="button"><div class="fam-dot">2</div><div><div class="fam-title">Rebuild the balance</div><div class="fam-sub">Stocks · flows · capacity · seasonality</div></div><div class="fam-toggle">+</div></button><div class="fam-body"><div><div class="fam-inner">Separate nameplate capacity from effective supply. Track maintenance, outages, yields, imports, exports, losses, and inventory by location and usability.</div></div></div></div>
+  <div class="fam"><button class="fam-head" type="button"><div class="fam-dot">3</div><div><div class="fam-title">Find the marginal unit</div><div class="fam-sub">Who sets the next tonne or barrel?</div></div><div class="fam-toggle">+</div></button><div class="fam-body"><div><div class="fam-inner">Ask which producer must enter, which consumer must exit, or which trade route must open to clear the market. That unit anchors the price mechanism.</div></div></div></div>
+  <div class="fam"><button class="fam-head" type="button"><div class="fam-dot">4</div><div><div class="fam-title">Map catalysts and disconfirmers</div><div class="fam-sub">Dates · data · thresholds · alternative explanations</div></div><div class="fam-toggle">+</div></button><div class="fam-body"><div><div class="fam-inner">Specify what should happen to inventories, basis, spreads, utilization, and price—and by when. A thesis that cannot fail is a narrative, not analysis.</div></div></div></div>
+</div></section>
+
+<section class="section" id="redflags" data-nav="Red flags"><div class="wrap">
+  <div class="kicker">10 / Failure modes</div><h2>The promotional playbook</h2>
+  <p class="sub">Commodity stories become dangerous when a true macro observation is used to skip the hard questions of timing, substitution, incentive, and investable exposure.</p>
+  <div class="grid g2">
+    <div class="card"><h3>“Structural shortage” with no price response</h3><p>High prices ration demand, invite substitution, release scrap, improve recovery, and finance supply. Ask what prevents each response.</p></div>
+    <div class="card"><h3>Demand in percentages, supply in adjectives</h3><p>Convert both sides into the same physical unit and year. Small bases make dramatic growth rates easy to manufacture.</p></div>
+    <div class="card"><h3>Benchmark price equals realized price</h3><p>Adjust for grade, location, payability, freight, treatment, timing, and hedges. Revenue is earned at the realized net price.</p></div>
+    <div class="card"><h3>Spot thesis, equity instrument</h3><p>A producer adds operating cost, capex, tax, geology, jurisdiction, leverage, dilution, and management. Those may dominate the commodity view.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="glossary" data-nav="Glossary"><div class="wrap">
+  <div class="kicker">11 / Vocabulary</div><h2>The words, defined</h2><p class="sub">Filter the core language of physical and derivatives markets.</p>
+  <div class="chiprow" id="gChips"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="physical">Physical</button><button class="chip" data-filter="curve">Curve</button><button class="chip" data-filter="risk">Risk</button></div>
+  <div class="grid g3" id="gGrid">
+    <div class="card glossary-item" data-cat="physical"><h3>Basis</h3><p>Local cash price minus the chosen futures benchmark, with convention checked carefully.</p></div>
+    <div class="card glossary-item" data-cat="curve"><h3>Backwardation</h3><p>A curve in which nearby delivery is priced above later delivery.</p></div>
+    <div class="card glossary-item" data-cat="curve"><h3>Contango</h3><p>A curve in which later delivery is priced above nearby delivery.</p></div>
+    <div class="card glossary-item" data-cat="physical"><h3>Convenience yield</h3><p>The non-cash benefit of holding usable physical inventory.</p></div>
+    <div class="card glossary-item" data-cat="physical"><h3>Crack / crush spread</h3><p>A modeled processing margin between an input commodity and its outputs.</p></div>
+    <div class="card glossary-item" data-cat="risk"><h3>Hedge</h3><p>A position intended to offset an existing commercial or financial exposure.</p></div>
+    <div class="card glossary-item" data-cat="risk"><h3>Initial margin</h3><p>Collateral posted to open a derivatives position; it is not the position’s purchase price.</p></div>
+    <div class="card glossary-item" data-cat="physical"><h3>Open interest</h3><p>The number of outstanding contracts, distinct from daily trading volume.</p></div>
+    <div class="card glossary-item" data-cat="curve"><h3>Roll yield</h3><p>The return effect of replacing an expiring futures contract with a later one.</p></div>
+    <div class="card glossary-item" data-cat="physical"><h3>Spot</h3><p>The market for immediate or near-immediate delivery under local convention.</p></div>
+    <div class="card glossary-item" data-cat="risk"><h3>Variation margin</h3><p>Cash transferred as a futures position is marked to market.</p></div>
+    <div class="card glossary-item" data-cat="physical"><h3>Warehouse receipt</h3><p>A document or electronic record representing deliverable material in approved storage.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="retain" data-nav="Takeaways"><div class="wrap">
+  <div class="kicker">12 / Retain</div><h2>Twelve things worth keeping</h2>
+  <div class="panel invert"><ol><li>Define the commodity by grade, place, month, and contract.</li><li>Start every view with a physical balance.</li><li>Accessible inventory matters more than headline inventory.</li><li>Low short-run elasticity makes small imbalances move price sharply.</li><li>The curve prices time and scarcity; it is not a consensus forecast.</li><li>Basis carries local information that the benchmark cannot.</li><li>The marginal unit—not the average unit—usually anchors price.</li><li>A hedge replaces price risk with basis, liquidity, and counterparty risks.</li><li>Futures returns include roll and collateral effects.</li><li>Producer equities are businesses, not barrels or tonnes.</li><li>Every shortage thesis needs a reason supply, substitution, or demand response fails.</li><li>A good thesis states what would prove it wrong.</li></ol></div>
+</div></section>
+
+<section class="section" id="sources" data-nav="Sources"><div class="wrap">
+  <div class="kicker">13 / Further study</div><h2>Where to go next</h2>
+  <p class="sub">Contract rules and official statistical systems are the primary sources. Use commentary to generate questions, then verify them against the underlying market.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Exchange rulebooks</h3><p>Contract specifications, delivery procedures, position limits, calendars, and settlement methodology.</p></div>
+    <div class="card"><h3>Government statistics</h3><p>Energy balances, crop reports, customs data, mine production, trade, stocks, and industrial consumption.</p></div>
+    <div class="card"><h3>Industry institutions</h3><p>Technical definitions, benchmark methodologies, warehouse data, shipping information, and processing economics.</p></div>
+  </div>
+  <div class="warning"><b>Standing caveat.</b> This is an educational framework, not investment, trading, legal, or tax advice. Contract specifications and market conventions change; verify the current rulebook before acting.</div>
+</div></section>
+</main>
+
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <p>Commodities From First Principles &mdash; a ground-up field guide to physical markets, derivatives, risk transfer, and research. Companion volume to <i>Mining From the Rock Up</i> and <i>Oil From the Reservoir Up</i>. Written for readers starting from zero.</p>
+    <p class="verstamp">Commodities From First Principles &mdash; v1.0 &middot; build 2026-09-10T06:46-04:00 &middot; first issue. Sections 1&ndash;13, one interactive model, searchable glossary.</p>
+    <p style="margin-top:8px">Contact: <a href="mailto:ponelson@gmail.com">ponelson@gmail.com</a> &middot; <a href="https://www.linkedin.com/in/ponelson/">LinkedIn</a> &middot; <a href="https://ponelson.github.io/pon/">GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+
+
+/* ---------------- theme ---------------- */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeToggle'),
+      lbl=document.getElementById('themeLabel'), meta=document.getElementById('themeColorMeta');
+  function read(){ try{return localStorage.getItem('theme');}catch(e){return null;} }
+  function write(v){ try{localStorage.setItem('theme',v);}catch(e){} }
+  function apply(t){
+    root.setAttribute('data-theme',t);
+    if(lbl) lbl.textContent = (t==='dark'?'Light':'Dark');
+    if(btn) btn.setAttribute('aria-pressed', t==='dark' ? 'true':'false');
+    if(meta) meta.setAttribute('content', t==='dark' ? '#0d0d10' : '#f5f5f7');
+  }
+  var saved=read();
+  var initial = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+  apply(initial);
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light':'dark';
+    apply(next); write(next);
+  });
+  if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
+    if(!read()) apply(e.matches?'dark':'light');
+  });
+})();
+
+/* ---------------- nav from sections ---------------- */
+(function(){
+  var secs=[].slice.call(document.querySelectorAll('section.section[data-nav]'));
+  var nl=document.getElementById('navlinks'), dr=document.getElementById('drawer'), mb=document.getElementById('menubtn');
+  secs.forEach(function(s){
+    [[nl],[dr]].forEach(function(h){
+      if(!h[0])return;
+      var a=document.createElement('a');
+      a.href='#'+s.id; a.textContent=s.dataset.nav;
+      h[0].appendChild(a);
+    });
+  });
+  if(mb&&dr) mb.addEventListener('click',function(){dr.classList.toggle('open');});
+  if(dr) dr.addEventListener('click',function(e){if(e.target.tagName==='A')dr.classList.remove('open');});
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      [].forEach.call(document.querySelectorAll('#navlinks a'),function(a){
+        a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id);
+      });
+    });
+  },{rootMargin:'-40% 0px -55% 0px'});
+  secs.forEach(function(s){io.observe(s);});
+})();
+
+/* ---------------- accordions ---------------- */
+[].forEach.call(document.querySelectorAll('.fam-head'),function(h){
+  h.addEventListener('click',function(){h.closest('.fam').classList.toggle('open');});
+});
+
+
+/* ---------------- carry model + glossary filter ---------------- */
+(function(){
+  function n(id){var el=document.getElementById(id);return el?Number(el.value):0;}
+  function draw(){
+    var spot=n('ccSpot'), rate=n('ccRate')/100, store=n('ccStore'), months=n('ccMonths');
+    var financing=spot*rate*months/12, storage=store*months, carry=financing+storage, fair=spot+carry;
+    var fairEl=document.getElementById('ccFair'), carryEl=document.getElementById('ccCarry'), pctEl=document.getElementById('ccPct');
+    if(fairEl) fairEl.textContent='$'+fair.toFixed(2);
+    if(carryEl) carryEl.textContent='$'+carry.toFixed(2);
+    if(pctEl) pctEl.textContent=(spot?carry/spot*100:0).toFixed(1)+'%';
+  }
+  ['ccSpot','ccRate','ccStore','ccMonths'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',draw);}); draw();
+})();
+(function(){
+  var row=document.getElementById('gChips'); if(!row)return;
+  row.addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;
+    [].forEach.call(row.querySelectorAll('.chip'),function(x){x.classList.toggle('active',x===b);});
+    var f=b.getAttribute('data-filter');
+    [].forEach.call(document.querySelectorAll('.glossary-item'),function(x){x.hidden=!(f==='all'||x.getAttribute('data-cat')===f);});
+  });
+})();
+</script>
+</body>
+</html>
